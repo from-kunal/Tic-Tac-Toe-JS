@@ -8,5 +8,46 @@
     <script src="script.js" defer></script>
   </head>
 
-  <body></body>
+  <body>
+    <div class="container">
+      <div class="game-info">
+        <div class="player-marker">
+          <h3>Symbol :</h3>
+          <img src="../assets/cross.svg" alt="" />
+        </div>
+
+        <div class="player-marker">
+          <h3>Symbol :</h3>
+          <img src="../assets/circle.svg" alt="" />
+        </div>
+
+        <div>
+          <label for="player-one">Player One : </label>
+          <input type="text" id="player-one" placeholder="Player One" />
+        </div>
+
+        <div>
+          <label for="player-two">Player Two : </label>
+          <input type="text" id="player-two" placeholder="Player Two" />
+        </div>
+
+        <button id="start-game">Start</button>
+        <button id="restart-game">Restart</button>
+      </div>
+
+      <div class="board">
+        <button class="cell" data-index="0"></button>
+        <button class="cell" data-index="1"></button>
+        <button class="cell" data-index="2"></button>
+        <button class="cell" data-index="3"></button>
+        <button class="cell" data-index="4"></button>
+        <button class="cell" data-index="5"></button>
+        <button class="cell" data-index="6"></button>
+        <button class="cell" data-index="7"></button>
+        <button class="cell" data-index="8"></button>
+      </div>
+
+      <div class="result"></div>
+    </div>
+  </body>
 </html>

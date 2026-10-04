@@ -1,0 +1,78 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background-color: deepskyblue;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 100vh;
+}
+
+.game-info {
+  display: grid;
+  grid-template: repeat(3, auto) / repeat(2, 1fr);
+  row-gap: 0.5rem;
+  column-gap: 1rem;
+}
+
+.player-marker {
+  display: flex;
+  gap: 1rem;
+  font-size: 1rem;
+  align-items: center;
+}
+
+.player-marker img {
+  width: 1.5rem;
+  height: auto;
+}
+
+input {
+  border-radius: 0.5em;
+  border: none;
+  padding: 0.5em 0.5em;
+}
+
+#start-game,
+#restart-game {
+  background-color: red;
+  color: white;
+  font-size: 1rem;
+  border-radius: 0.5em;
+  font-weight: bold;
+  padding: 0.5em 0.8em;
+  border: none;
+  justify-self: end;
+  min-width: 6rem;
+}
+
+#restart-game {
+  justify-self: start;
+}
+
+.board {
+  display: grid;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  height: min(60vh, 90vw);
+  gap: 0.5rem;
+  background-color: purple;
+  border: none;
+}
+
+.cell {
+  font-size: 2rem;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: deepskyblue;
+  border: none;
+}
+
+.result {
+  font-size: 1.5rem;
+}

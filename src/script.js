@@ -31,14 +31,26 @@ const GameController = ((
     },
   ];
 
+  const setNames = (one = Player[0].name, two = Player[1].name) => {
+    Player[0].name = one;
+    Player[1].name = two;
+  };
+
   let currentPlayer = Player[0];
 
   const switchPlayer = () => {
-    currentPlayer = currentPlayer === Player[0] ? Player[1] : Player[0];
+    status.text = `${currentPlayer.marker} : ${currentPlayer.name}'s turn`;
+    return (currentPlayer =
+      currentPlayer === Player[0] ? Player[1] : Player[0]);
   };
 
-  const getCurrentPlayer = () => currentPlayer;
-  let gameOver = false;
+  let status = {
+    started: false,
+    gameOver: false,
+    text: "Press red button to start the game",
+  };
+
+  const getStatus = () => status;
 
   const winningCombos = [
     [0, 1, 2],
@@ -62,15 +74,27 @@ const GameController = ((
   };
 
   const playGame = (index) => {
+    if (!status.started) {
+      status.text = "Press red button to start the game";
+      return;
+    }
+
+    if (status.gameOver) {
+      status.text = "Game Over, Restart to play again";
+      return;
+    }
+
     const success = GameBoard.placeMarker(index, currentPlayer.marker);
     if (!success) return;
 
     if (checkWinner(GameBoard.getBoard(), currentPlayer.marker)) {
-      console.log(`${currentPlayer.name} "${currentPlayer.marker} wins`);
-      gameOver = true;
+      status.text = `${currentPlayer.name} "${currentPlayer.marker}" wins`;
+      status.gameOver = true;
+      return;
     } else if (isDraw(GameBoard.getBoard())) {
-      console.log("It's a draw");
-      gameOver = true;
+      status.text = "It's a draw";
+      status.gameOver = true;
+      return;
     }
     switchPlayer();
   };
@@ -78,17 +102,60 @@ const GameController = ((
   const restartGame = () => {
     GameBoard.resetBoard();
     currentPlayer = Player[0];
-    gameOver = false;
+    status.gameOver = false;
+    status.started = true;
+    status.text = `${currentPlayer.marker} : ${currentPlayer.name}'s turn`;
   };
 
-  return { getCurrentPlayer, playGame, restartGame };
+  return { playGame, restartGame, getStatus, setNames };
 })();
 
-GameController.playGame(0);
-GameController.playGame(4);
+const ScreenController = (() => {
+  const boardDiv = document.querySelector(".board");
+  const result = document.querySelector(".result");
+  const startBtn = document.querySelector("#start-game");
+  const reStartBtn = document.querySelector("#restart-game");
 
-GameController.playGame(1);
-GameController.playGame(8);
+  const updateScreen = () => {
+    // update board from dom & get changing status
+    const board = GameBoard.getBoard();
+    const status = GameController.getStatus();
 
-GameController.playGame(2);
-GameController.playGame(5);
+    // display players turn
+    result.textContent = status.text;
+
+    const cells = document.querySelectorAll(".cell");
+    // put each value in each cell again
+    cells.forEach((cell, index) => {
+      cell.textContent = board[index];
+    });
+  };
+
+  const clickHandlerBoard = (event) => {
+    // grab the clicked cell to put marker
+    const cell = event.target.closest(".cell");
+    if (!cell) return;
+
+    // if game is over or hasn't started
+    if (GameController.getStatus().gameOver) {
+      result.textContent = GameController.getStatus().text;
+      return;
+    }
+
+    GameController.playGame(Number(cell.dataset.index));
+    updateScreen();
+  };
+
+  const startGame = () => {
+    GameController.setNames(
+      document.querySelector("#player-one").value.trim(),
+      document.querySelector("#player-two").value.trim(),
+    );
+    GameController.restartGame();
+    updateScreen();
+  };
+
+  boardDiv.addEventListener("click", clickHandlerBoard);
+  startBtn.addEventListener("click", startGame);
+  reStartBtn.addEventListener("click", startGame);
+})();
