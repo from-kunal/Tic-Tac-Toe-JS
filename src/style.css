@@ -73,6 +73,16 @@ input {
   border: none;
 }
 
+.mark-x {
+  color: red;
+  font-size: 3rem;
+}
+
+.mark-o {
+  color: green;
+  font-size: 3rem;
+}
+
 .result {
   font-size: 1.5rem;
 }

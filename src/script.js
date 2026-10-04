@@ -4,6 +4,7 @@ const GameBoard = (() => {
   const getBoard = () => board;
 
   const placeMarker = (index, marker) => {
+    // handles if user is trying to put more X or O in cell again
     if (board[index] !== "") return false;
     board[index] = marker;
     return true;
@@ -39,9 +40,9 @@ const GameController = ((
   let currentPlayer = Player[0];
 
   const switchPlayer = () => {
+    currentPlayer = currentPlayer === Player[0] ? Player[1] : Player[0];
     status.text = `${currentPlayer.marker} : ${currentPlayer.name}'s turn`;
-    return (currentPlayer =
-      currentPlayer === Player[0] ? Player[1] : Player[0]);
+    return currentPlayer;
   };
 
   let status = {
@@ -127,6 +128,12 @@ const ScreenController = (() => {
     const cells = document.querySelectorAll(".cell");
     // put each value in each cell again
     cells.forEach((cell, index) => {
+      if (board[index] === "X") {
+        cell.classList.add("mark-x");
+      } else if (board[index] === "O") {
+        cell.classList.add("mark-o");
+      }
+
       cell.textContent = board[index];
     });
   };
@@ -148,10 +155,15 @@ const ScreenController = (() => {
 
   const startGame = () => {
     GameController.setNames(
-      document.querySelector("#player-one").value.trim(),
-      document.querySelector("#player-two").value.trim(),
+      document.querySelector("#player-one").value.trim() || undefined,
+      document.querySelector("#player-two").value.trim() || undefined,
     );
     GameController.restartGame();
+
+    // remove mark-x & mark-o classes from buttons after restart
+    document
+      .querySelectorAll(".cell")
+      .forEach((cell) => cell.classList.remove("mark-x", "mark-o"));
     updateScreen();
   };
 
